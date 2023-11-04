@@ -5,26 +5,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ball Game</title>
+    </head>
     <style>
+    .ball {
+      width: 40px;
+      height: 40px;
+      background-color: rgb(152, 152, 210);
+      border-radius: 50%;
+      position: absolute;
+      animation: fall 1s ease-in;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-60%);
+      }
+      100% {
+        transform: translateY(60vh);
+      }
+    }
         body {
             margin: 0;
             overflow: hidden;
         }
 
-        #ball {
-            width: 50px;
-            height: 50px;
-            background-color: rgb(255, 250, 250);
-            border-radius: 50%;
-            position: absolute;
-        }
+         /* .ball1 {
+    width: 20px;
+   height: 20px;
+   background-color: rgb(30, 30, 91);
+    border-radius: 50%;
+    position: absolute; } */
+    /* #ball1{
+    width: 20px;
+     height: 20px;
+     background-color: blue;
+     border-radius: 50%;
+     position: absolute;
+    } */
     </style>
 </head>
 
 <body>
-    <div id="ball"></div>
-
     <script>
+            function createFallingBall(event) {
+      const ball = document.createElement("div");
+      ball.className = "ball";
+      document.body.appendChild(ball);
+
+      const xPos = event.clientX - ball.offsetWidth / 2;
+      ball.style.left = xPos + "px";
+
+      // Optionally, you can remove the ball after the animation ends
+      ball.addEventListener("animationend", function() {
+        ball.style.top =  60+ "vh";
+      });
+    }
+    document.addEventListener("click", createFallingBall);
+        //hehheheh
+
+
+  // You can add additional styling to the ball class in your CSS file
+  // For example:
+  // .ball {
+  //   width: 20px;
+  //   height: 20px;
+  //   background-color: blue;
+  //   border-radius: 50%;
+  //   position: absolute;
+  // }
+
+  // Optionally, you can remove the ball after a certain duration
+//   setTimeout(() => {
+//     ball.remove();
+//   }, 2000); // Ball will be removed after 2 seconds (2000 milliseconds)
+
+
+// Example: Add click event listener to the document
+//end teehee
+const ball = document.getElementById('ball');
+        let ballX = 0;
+        let ballSpeedX = 3;
+        const ballSize = 50;
+
+        const updateBallPosition = () => {
+            ballX += ballSpeedX;
+
+            if (ballX + ballSize > window.innerHeight || ballX < 0) {
+                ballSpeedX *= -1;
+            }
+
+            ball1.style.top = ballX + 'px';
+
+
+        };
+
+        // window.addEventListener('keydown', (event) => {
+        //     if (event.key === 'ArrowDown' && ball.offsetLeft > window.innerWidth) {
+        //         ball.style.left = ball.offsetLeft - 10 + 'px';
+        //     } else if (event.key === 'ArrowRight' && ball.offsetLeft + ballSize < window.innerWidth) {
+        //         ball.style.left = ball.offsetLeft + 10 + 'px';
+        //     }
+        // });
+
+        updateBallPosition();
+        //old
+        /*  
         const ball = document.getElementById('ball');
         let ballX = 0;
         let ballSpeedX = 3;
@@ -50,6 +135,7 @@
         });
 
         updateBallPosition();
+      */  //end old
     </script>
 </body>
 

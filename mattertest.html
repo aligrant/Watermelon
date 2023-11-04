@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ball Game</title>
+</head>
+<style>
+    .ball {
+        width: 40px;
+        height: 40px;
+        background-color: rgb(152, 152, 210);
+        border-radius: 50%;
+        position: absolute;
+        animation: fall 1s ease-in;
+    }
+
+    @keyframes fall {
+        0% {
+            transform: translateY(-60%);
+        }
+
+        100% {
+            transform: translateY(60vh);
+        }
+    }
+
+</style>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
+    <script>
+        const Engine = Matter.Engine,
+            Render = Matter.Render,
+            Runner = Matter.Runner,
+            Bodies = Matter.Bodies,
+            Composite = Matter.Composite;
+        const iEngine = Engine.create();
+        const iRunner = Runner.create();
+        const iRender = Render.create({
+            element: document.body,
+            engine: iEngine,
+            options: {
+                width: 800,
+                height: 400,
+                wireframes: false,
+                background: "gray"
+            }
+        });
+//(location x +right, location start y +down,width,   )
+//for circle 3 is radius
+        const ground = Bodies.rectangle(400, 380, 810, 60, { isStatic: true });
+        var wall = Matter.Bodies.rectangle(20, 90, 6, 1000, {
+  isStatic: true,
+});
+var wall2 = Matter.Bodies.rectangle(800, 90, 6, 1000, {
+  isStatic: true,
+});
+        Composite.add(iEngine.world, [ground, wall, wall2]);
+        Render.run(iRender);
+        Runner.run(iRunner, iEngine);
+function addball(event){
+    const ballD = Bodies.circle(400, 50, 50, 3);
+    Composite.add(iEngine.world, [ ballD]);
+    
+}
+document.addEventListener("click", addball);
+        // function createFallingBall(event) {
+        //     const ballT=bodies.circle(490, 17, 60, 40);
+
+        //     ballT.className = "ball";
+        //     document.body.appendChild(ball);
+        //     Composite.add(iEngine.world, [ballT]);
+        //     const xPos = event.clientX - ball.offsetWidth / 2;
+        //     ball.style.left = xPos + "px";
+
+        //     // Optionally, you can remove the ball after the animation ends
+        //     ball.addEventListener("animationend", function () {
+        //         ball.style.top = 60 + "vh";
+        //     });
+        //     // const ball = document.createElement("div");
+        //     // ball.className = "ball";
+        //     // document.body.appendChild(ball);
+
+        //     // const xPos = event.clientX - ball.offsetWidth / 2;
+        //     // ball.style.left = xPos + "px";
+
+        //     // // Optionally, you can remove the ball after the animation ends
+        //     // ball.addEventListener("animationend", function () {
+        //     //     ball.style.top = 60 + "vh";
+        //     // });
+        // }
+        // document.addEventListener("click", createFallingBall);
+
+        // const ball = document.getElementById('ball');
+        // let ballX = 0;
+        // let ballSpeedX = 3;
+        // const ballSize = 50;
+        // const updateBallPosition = () => {
+        //     ballX += ballSpeedX;
+
+        //     if (ballX + ballSize > window.innerHeight || ballX < 0) {
+        //         ballSpeedX *= -1;
+        //     }
+
+        //     ball1.style.top = ballX + 'px';
+
+
+        // };
+
+        // updateBallPosition();
+
+
+    </script>
+</body>
+
+</html>
