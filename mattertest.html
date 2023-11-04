@@ -60,11 +60,54 @@ var wall2 = Matter.Bodies.rectangle(800, 90, 6, 1000, {
         Render.run(iRender);
         Runner.run(iRunner, iEngine);
 function addball(event){
-    const ballD = Bodies.circle(400, 50, 50, 3);
-    Composite.add(iEngine.world, [ ballD]);
-    
+    document.removeEventListener("click", addball);
+    function fallball(event){
+
+    document.removeEventListener("click", fallball);
+    Composite.remove(iEngine.world, [platform]);
+    setTimeout(function(){
+        document.addEventListener("click", addball);
+    },500);
+}
+    var platform=Bodies.rectangle(400, 100, 810, 1, { isStatic: true });
+    Composite.add(iEngine.world, [platform]);
+    var ball = Bodies.circle(400, 50, 50, 3,);
+ Composite.add(iEngine.world, [ball]);
+
+    document.addEventListener("click", fallball);
 }
 document.addEventListener("click", addball);
+    // Create a draggable ball
+    var Mouse = Matter.Mouse,
+        MouseConstraint = Matter.MouseConstraint;
+    // Create mouse constraint
+    var mouse = Mouse.create(Render.create.canvas);
+    var mouseConstraint = MouseConstraint.create(iEngine, {
+      mouse: mouse,
+    });
+
+    Matter.World.add(iEngine.world, mouseConstraint);
+    // Make the ball draggable
+    var isDragging = false;
+
+    Matter.Events.on(mouseConstraint, "startdrag", function (event) {
+      if (event.body === ball) {
+        isDragging = true;
+      }
+    });
+
+    Matter.Events.on(mouseConstraint, "enddrag", function (event) {
+      if (event.body === ball) {
+        isDragging = false;
+      }
+    });
+
+    Matter.Events.on(iEngine, "afterUpdate", function () {
+      if (isDragging) {
+        // Update some custom behavior while dragging if needed
+      }
+    });
+//
         // function createFallingBall(event) {
         //     const ballT=bodies.circle(490, 17, 60, 40);
 
@@ -78,17 +121,17 @@ document.addEventListener("click", addball);
         //     ball.addEventListener("animationend", function () {
         //         ball.style.top = 60 + "vh";
         //     });
-        //     // const ball = document.createElement("div");
-        //     // ball.className = "ball";
-        //     // document.body.appendChild(ball);
+        //     const ball = document.createElement("div");
+        //     ball.className = "ball";
+        //     document.body.appendChild(ball);
 
-        //     // const xPos = event.clientX - ball.offsetWidth / 2;
-        //     // ball.style.left = xPos + "px";
+        //     const xPos = event.clientX - ball.offsetWidth / 2;
+        //     ball.style.left = xPos + "px";
 
-        //     // // Optionally, you can remove the ball after the animation ends
-        //     // ball.addEventListener("animationend", function () {
-        //     //     ball.style.top = 60 + "vh";
-        //     // });
+        //     // Optionally, you can remove the ball after the animation ends
+        //     ball.addEventListener("animationend", function () {
+        //         ball.style.top = 60 + "vh";
+        //     });
         // }
         // document.addEventListener("click", createFallingBall);
 

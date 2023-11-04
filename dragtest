@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Draggable Ball with Matter.js</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      background-color: #f0f0f0;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script>
+    // Module aliases
+    var Engine = Matter.Engine,
+        Render = Matter.Render,
+        World = Matter.World,
+        Bodies = Matter.Bodies,
+        Mouse = Matter.Mouse,
+        MouseConstraint = Matter.MouseConstraint;
+
+    // Create an engine
+    var engine = Engine.create();
+
+    // Create a renderer
+    var render = Render.create({
+      element: document.getElementById("container"),
+      engine: engine,
+      options: {
+        width: 800,
+        height: 600,
+      },
+    });
+
+    // Create a draggable ball
+    var ball = Bodies.circle(200, 200, 30, {
+      friction: 0.5,
+    });
+
+    World.add(engine.world, [ball]);
+
+    // Create mouse constraint
+    var mouse = Mouse.create(render.canvas);
+    var mouseConstraint = MouseConstraint.create(engine, {
+      mouse: mouse,
+    });
+
+    World.add(engine.world, mouseConstraint);
+
+    // Start the engine
+    Engine.run(engine);
+
+    // Start the renderer
+    Render.run(render);
+
+    // Make the ball draggable
+    var isDragging = false;
+
+    Matter.Events.on(mouseConstraint, "startdrag", function (event) {
+      if (event.body === ball) {
+        isDragging = true;
+      }
+    });
+
+    Matter.Events.on(mouseConstraint, "enddrag", function (event) {
+      if (event.body === ball) {
+        isDragging = false;
+      }
+    });
+
+    Matter.Events.on(engine, "afterUpdate", function () {
+      if (isDragging) {
+        // Update some custom behavior while dragging if needed
+      }
+    });
+  </script>
+</body>
+</html>
