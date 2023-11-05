@@ -6,6 +6,10 @@
     <title>Ball Game</title>
 </head>
 <style>
+    body{
+        margin:0;
+        overflow: hidden;
+    }
     .ball {
         width: 40px;
         height: 40px;
@@ -35,45 +39,47 @@
             Runner = Matter.Runner,
             Bodies = Matter.Bodies,
             Composite = Matter.Composite;
+            var platx=window.innerWidth,
+                platy=window.innerHeight;
+
         const iEngine = Engine.create();
         const iRunner = Runner.create();
         const iRender = Render.create({
             element: document.body,
             engine: iEngine,
             options: {
-                width: 800,
-                height: 400,
+                width: platx,
+                height: platy,
                 wireframes: false,
                 background: "gray"
             }
         });
 //(location x +right, location start y +down,width,   )
 //for circle 3 is radius
-        const ground = Bodies.rectangle(400, 380, 810, 60, { isStatic: true });
-        var wall = Matter.Bodies.rectangle(20, 90, 6, 1000, {
+
+        const ground = Bodies.rectangle(0, platy, 2*platx, 60, { isStatic: true });
+        var wall1 = Matter.Bodies.rectangle(20, 90, 6, 1000, {
   isStatic: true,
 });
-var wall2 = Matter.Bodies.rectangle(800, 90, 6, 1000, {
+var wall2 = Matter.Bodies.rectangle(platx-20, 90, 6, 1000, {
   isStatic: true,
 });
-        Composite.add(iEngine.world, [ground, wall, wall2]);
+        Composite.add(iEngine.world, [ground, wall1, wall2]);
         Render.run(iRender);
         Runner.run(iRunner, iEngine);
 function addball(event){
     document.removeEventListener("click", addball);
     function fallball(event){
-
     document.removeEventListener("click", fallball);
     Composite.remove(iEngine.world, [platform]);
     setTimeout(function(){
         document.addEventListener("click", addball);
     },500);
 }
-    var platform=Bodies.rectangle(400, 100, 810, 1, { isStatic: true });
+    var platform=Bodies.rectangle(400, 150, 810, 70, { isStatic: true });
     Composite.add(iEngine.world, [platform]);
-    var ball = Bodies.circle(400, 50, 50, 3,);
+    var ball = Bodies.circle(platx/2, 70, 50, 3);
  Composite.add(iEngine.world, [ball]);
-
     document.addEventListener("click", fallball);
 }
 document.addEventListener("click", addball);
@@ -92,6 +98,7 @@ document.addEventListener("click", addball);
 
     Matter.Events.on(mouseConstraint, "startdrag", function (event) {
       if (event.body === ball) {
+        event.body.collisionFilter.category = 0x0008; // move body to new category to avoid collision
         isDragging = true;
       }
     });
