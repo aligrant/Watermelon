@@ -76,7 +76,14 @@ function addball(event){
         document.addEventListener("click", addball);
     },500);
 }
-    var platform=Bodies.rectangle(400, 150, 810, 70, { isStatic: true });
+    var platform=Bodies.rectangle(400, 155, 810, 70,{
+    isStatic: true,
+    render: {
+         fillStyle: 'gray',
+         strokeStyle: 'green',
+         lineWidth: 3
+    }
+});
     Composite.add(iEngine.world, [platform]);
     var ball = Bodies.circle(platx/2, 70, 50, 3);
  Composite.add(iEngine.world, [ball]);
