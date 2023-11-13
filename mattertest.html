@@ -34,6 +34,7 @@
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
     <script>
+        var xpos=100;
         const Engine = Matter.Engine,
             Render = Matter.Render,
             Runner = Matter.Runner,
@@ -67,7 +68,35 @@ var wall2 = Matter.Bodies.rectangle(platx-20, 90, 6, 1000, {
         Composite.add(iEngine.world, [ground, wall1, wall2]);
         Render.run(iRender);
         Runner.run(iRunner, iEngine);
+//         function dragball(event){
+//             xpos+=10;
+//             Matter.Body.set(ball, "position", {x: xpos, y: 70});
+//             Matter.Body.setPosition(ball, {
+//         x: xpos,
+//         y: 70
+//     });
+//     Render.run(render);
+//     Runner.run(runner, Engine)
+// }
+
 function addball(event){
+    
+// Sample array
+var radii = [20, 30, 40, 50, 60];
+var colr=["yellow","orange","green","blue","purple"];
+// Getting a random value
+var index=Math.floor(Math.random() * radii.length);
+var randrad = radii[index];
+var randcol = colr[index];
+//GOOD
+Matter.Events.on(iEngine,'collisionStart', _ => {
+    _.pairs.forEach(_ => {
+        //bodyB for thing being hits
+        if(_.bodyA === ball )
+            Matter.World.remove(iEngine.world, ball);
+    });
+});
+//END GOOD
     document.removeEventListener("click", addball);
     function fallball(event){
     document.removeEventListener("click", fallball);
@@ -76,51 +105,89 @@ function addball(event){
         document.addEventListener("click", addball);
     },500);
 }
-    var platform=Bodies.rectangle(400, 155, 810, 70,{
+    var platform=Bodies.rectangle(400, 155, platx*1.5, 70,{
     isStatic: true,
     render: {
-         fillStyle: 'gray',
-         strokeStyle: 'green',
-         lineWidth: 3
+        //  fillStyle: 'gray',
+        //  strokeStyle: 'gray',
+        //  lineWidth: 3,
+         visible:false
     }
 });
+
+document.addEventListener("keydown", function (event) {
+  let keyCode = event.keyCode;
+  let position = ball.position;
+  let posy=ball.position.y;
+  let speed = 5; // set the speed of movement
+
+  // move the body based on the key pressed
+  if (keyCode === 37&&posy<=200) {
+    // move left
+    Matter.Body.translate(ball, { x: -speed, y: 0 });
+  } 
+//   else if (keyCode === 38&&posx<=80) {
+//     // move up
+//     Matter.Body.translate(ball, { x: 0, y: -speed });
+//   } 
+  else if (keyCode === 39&&posy<=200) {
+    // move right
+    Matter.Body.translate(ball, { x: speed, y: 0 });
+  } 
+//   else if (keyCode === 40&&posx<=80) {
+//     // move down
+//     Matter.Body.translate(ball, { x: 0, y: speed });
+//   }
+});
     Composite.add(iEngine.world, [platform]);
-    var ball = Bodies.circle(platx/2, 70, 50, 3);
+    var ball = Bodies.circle(platx/2, 70, randrad, {
+      render: {
+        fillStyle: randcol
+      }
+    }
+);
+
  Composite.add(iEngine.world, [ball]);
     document.addEventListener("click", fallball);
 }
 document.addEventListener("click", addball);
-    // Create a draggable ball
-    var Mouse = Matter.Mouse,
-        MouseConstraint = Matter.MouseConstraint;
-    // Create mouse constraint
-    var mouse = Mouse.create(Render.create.canvas);
-    var mouseConstraint = MouseConstraint.create(iEngine, {
-      mouse: mouse,
-    });
+//source:https://forums.tumult.com/t/collision-detection-using-the-physics-engine-matter-js/17197
+    // // Create a draggable ball
+    // var Mouse = Matter.Mouse,
+    //     MouseConstraint = Matter.MouseConstraint;
+    // // Create mouse constraint
+    // var mouse = Mouse.create(Render.create.canvas);
+    // var mouseConstraint = MouseConstraint.create(iEngine, {
+    //   mouse: mouse,
+    //         constraint: {
+    //             stiffness: 0.1,
+    //             render: {
+    //                 visible: false
+    //             }
+    // }});
+    // Matter.World.add(iEngine.world, mouseConstraint);
+    // // Make the ball draggable
+    // var isDragging = false;
+    // Matter.Events.on(mouseConstraint, "startdrag", function (event) {
+    //   if (event.body === ball) {
+    //     event.body.collisionFilter.category = 0x0008; // move body to new category to avoid collision
+    //     isDragging = true;
+    //   }
+    // });
 
-    Matter.World.add(iEngine.world, mouseConstraint);
-    // Make the ball draggable
-    var isDragging = false;
+    // Matter.Events.on(mouseConstraint, "enddrag", function (event) {
+    //   if (event.body === ball) {
+    //     isDragging = false;
+    //   }
+    // });
 
-    Matter.Events.on(mouseConstraint, "startdrag", function (event) {
-      if (event.body === ball) {
-        event.body.collisionFilter.category = 0x0008; // move body to new category to avoid collision
-        isDragging = true;
-      }
-    });
+    // Matter.Events.on(iEngine, "afterUpdate", function () {
+    //   if (isDragging) {
+    //     xpos=event.clientX-20;
 
-    Matter.Events.on(mouseConstraint, "enddrag", function (event) {
-      if (event.body === ball) {
-        isDragging = false;
-      }
-    });
-
-    Matter.Events.on(iEngine, "afterUpdate", function () {
-      if (isDragging) {
-        // Update some custom behavior while dragging if needed
-      }
-    });
+    //     // Update some custom behavior while dragging if needed
+    //   }
+    // });
 //
         // function createFallingBall(event) {
         //     const ballT=bodies.circle(490, 17, 60, 40);
