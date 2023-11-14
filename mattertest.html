@@ -93,16 +93,17 @@ Matter.Events.on(iEngine,'collisionStart', _ => {
     _.pairs.forEach(_ => {
         var col1=_.bodyA.fillStyle;
         var col2=_.bodyB.fillStyle;
-
+alert(col1);
         //bodyB for thing being hits
+        //col inside of first if
         if(_.bodyA === ball ){
             if(col1==col2){
-            alert("same");
+                ball.render.fillStyle=col1;
         }
         //ball.options.fillStyle('green')
 // Matter.World.set(ball,"fillStyle",'green');
             //Matter.World.remove(iEngine.world, ball);
-            ball.render.fillStyle="black";
+           
         }
     });
 });
