@@ -91,11 +91,30 @@ var randcol = colr[index];
 //GOOD
 Matter.Events.on(iEngine,'collisionStart', _ => {
     _.pairs.forEach(_ => {
+        var col1=_.bodyA.fillStyle;
+        var col2=_.bodyB.fillStyle;
+
         //bodyB for thing being hits
-        if(_.bodyA === ball )
-            Matter.World.remove(iEngine.world, ball);
+        if(_.bodyA === ball ){
+            if(col1==col2){
+            alert("same");
+        }
+        //ball.options.fillStyle('green')
+// Matter.World.set(ball,"fillStyle",'green');
+            //Matter.World.remove(iEngine.world, ball);
+            ball.render.fillStyle="black";
+        }
     });
 });
+// Matter.Events.on(iEngine,'collisionStart', _ => {
+//     _.pairs.forEach(_ => {
+//         //bodyB for thing being hits
+//         if(_.bodyA === ball )
+//         //ball.options.fillStyle('green')
+// // Matter.World.set(ball,"fillStyle",'green');
+//             Matter.World.remove(iEngine.world, ball);
+//     });
+// });
 //END GOOD
     document.removeEventListener("click", addball);
     function fallball(event){
@@ -145,8 +164,8 @@ document.addEventListener("keydown", function (event) {
         fillStyle: randcol
       }
     }
+   
 );
-
  Composite.add(iEngine.world, [ball]);
     document.addEventListener("click", fallball);
 }
