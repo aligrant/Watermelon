@@ -89,24 +89,54 @@ var index=Math.floor(Math.random() * radii.length);
 var randrad = radii[index];
 var randcol = colr[index];
 //GOOD
-Matter.Events.on(iEngine,'collisionStart', _ => {
+Matter.Events.on(iEngine,'collisionEnd', _ => {
     _.pairs.forEach(_ => {
-        var col1=_.bodyA.fillStyle;
-        var col2=_.bodyB.fillStyle;
-alert(col1);
         //bodyB for thing being hits
         //col inside of first if
-        if(_.bodyA === ball ){
-            if(col1==col2){
-                ball.render.fillStyle=col1;
-        }
+        if(_.bodyA.parent.render.fillStyle === _.bodyB.parent.render.fillStyle ){
+            // ball.render.fillStyle=colr[colr.indexOf(randcol)+1];
+            var posix=_.bodyA.parent.position.x;
+            var posiy=_.bodyA.parent.position.y;
+
+
+            if(colr.indexOf(randcol)<4){
+            Matter.World.remove(iEngine.world, _.bodyA.parent);
+            Matter.World.remove(iEngine.world, _.bodyB.parent);
+            ball1=Bodies.circle(posix, posiy, radii[colr.indexOf(randcol)+1],{
+            render:{
+                fillStyle: colr[colr.indexOf(randcol)+1]
+            }
+        });
+        // Matter.Pairs.clear(pairs);
+        Composite.add(iEngine.world, [ball1]);
+    
+    }
+
+//something up with not calling again
+
+            // ball.render.radius=radii[collision.penetration.x,collision.penetration.y,radii.indexOf(randrad)+1];
+            //Matter.Body.width(ball, { });
+        //     if(col1==col2){
+        //         ball.render.fillStyle=randcol;
+        // }
         //ball.options.fillStyle('green')
 // Matter.World.set(ball,"fillStyle",'green');
             //Matter.World.remove(iEngine.world, ball);
            
         }
+        // if(_.bodyB === ball ){
+        //     ball.render.fillStyle=randcol;
+
+        // }
+        
     });
+
+
 });
+// Matter.Events.on(iEngine,'collisionEnd', _ => {_.pairs.forEach(_ => {
+// Composite.add(iEngine.world, [ball1]);
+// });});
+
 // Matter.Events.on(iEngine,'collisionStart', _ => {
 //     _.pairs.forEach(_ => {
 //         //bodyB for thing being hits
